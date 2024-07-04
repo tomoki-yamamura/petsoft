@@ -8,7 +8,7 @@ export default function Layout({ children }: {
   return (
     <>
       <BackgroundPattern />
-      <div className="max-w-[1080px] mx-auto">
+      <div className="flex flex-col max-w-[1080px] mx-auto px-2 min-h-screen">
         <AppHeader />
         {children}
         <AppFooter />
