@@ -21,8 +21,8 @@ type TPetContext = {
 
 export const PetContext = createContext<TPetContext | null>(null);
 
-export default function PetContextProvider({ children, data }: PetContextProviderProps) {
-  const [pets, setPets] = useState(data)
+export default function PetContextProvider({ children, data: pets }: PetContextProviderProps) {
+
   const [selectedPetId, setSelectedPetId] = useState<string | null>(null)
 
   const selectedPet = pets.find((pet) => pet.id === selectedPetId)
@@ -37,21 +37,21 @@ export default function PetContextProvider({ children, data }: PetContextProvide
   }
 
   const handleEditPet = (petId: string, newPetData: Omit<Pet, "id">) => {
-    setPets((prev) => prev.map((pet) => {
-      if (pet.id === petId) {
-        return {
-          ...pet,
-          ...newPetData
-        }
-      }
-      return pet;
-    })
-    )
+    // setPets((prev) => prev.map((pet) => {
+    //   if (pet.id === petId) {
+    //     return {
+    //       ...pet,
+    //       ...newPetData
+    //     }
+    //   }
+    //   return pet;
+    // })
+    // )
   }
 
   const handleCheckoutPet = (id: string) => {
-    setPets(prev => prev.filter(pet => pet.id !== id))
-    setSelectedPetId(null)
+    // setPets(prev => prev.filter(pet => pet.id !== id))
+    // setSelectedPetId(null)
   }
 
   const handleChangeSelectedPetId = (id: string) => {
