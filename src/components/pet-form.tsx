@@ -1,21 +1,35 @@
 "use client"
 
-import { addPet, editPet } from "@/actions/actions";
 import { usePetContext } from "@/lib/hooks";
-import { Button } from "./ui/button";
+import { useForm } from "react-hook-form";
+import PetFormBtn from "./pet-form-btn";
 import { Input } from "./ui/input";
 import { Label } from "./ui/label";
 import { Textarea } from "./ui/textarea";
-import PetFormBtn from "./pet-form-btn";
-import { toast } from "sonner";
 
 type PetFormProps = {
   actionType: "add" | "edit";
   onFormSubmission: () => void;
 }
 
+type TPetForm = {
+  name: string;
+  ownerName: string;
+  imageUrl: string;
+  age: number;
+  notes: string
+}
+
 export default function PetForm({ actionType, onFormSubmission }: PetFormProps) {
   const { handleAddPet, handleEditPet, selectedPet } = usePetContext();
+
+  const {
+    register,
+    formState: {
+      isSubmitting,
+      errors
+    }
+  } = useForm<TPetForm>();
 
   return (
     <form action={async (formData) => {
@@ -37,26 +51,52 @@ export default function PetForm({ actionType, onFormSubmission }: PetFormProps) 
       <div className=" space-y-3">
         <div className="space-y-1">
           <Label htmlFor="name">Name</Label>
-          <Input name="name" id="name" type="text" required
-          defaultValue={actionType === "edit" ? selectedPet?.name : ""} />
+          <Input
+            {...register("name")}
+            id="name"
+          />
+          {errors.name && <span className="text-red-500">{errors.name.message}</span>}
         </div>
+
         <div className="space-y-1">
           <Label htmlFor="ownerName">Owner Name</Label>
-          <Input name="ownerName" id="ownerName" type="text" required
-            defaultValue={actionType === "edit" ? selectedPet?.ownerName : ""} />
+          <Input
+            id="ownerName"
+            {...register("ownerName")}
+          />
+          {errors.ownerName && <span className="text-red-500">{errors.ownerName.message}</span>}
+
         </div>
+
         <div className="space-y-1">
           <Label htmlFor="imageUrl">Image Url</Label>
-          <Input name="imageUrl" id="imageUrl" type="text" defaultValue={actionType === "edit" ? selectedPet?.imageUrl : ""}/>
+          <Input
+            id="imageUrl"
+            {...register("imageUrl")}
+          />
+          {errors.imageUrl && <span className="text-red-500">{errors.imageUrl.message}</span>}
+
         </div>
+
         <div className="space-y-1">
           <Label htmlFor="age">Age</Label>
-          <Input name="age" id="age" type="number" required defaultValue={actionType === "edit" ? selectedPet?.age : ""} />
+          <Input
+            id="age"
+            {...register("age")}
+          />
+          {errors.age && <span className="text-red-500">{errors.age.message}</span>}
+
         </div>
+
         <div className="space-y-1">
           <Label htmlFor="notes">Notes</Label>
-          <Textarea name="notes" id="notes" rows={3} required defaultValue={actionType === "edit" ? selectedPet?.notes : ""}/>
+          <Textarea
+            id="notes"
+            {...register("notes")}
+          />
+          {errors.notes && <span className="text-red-500">{errors.notes.message}</span>}
         </div>
+
       </div>
       <PetFormBtn actionType={actionType} />
     </form>
