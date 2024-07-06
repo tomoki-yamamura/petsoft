@@ -1,10 +1,9 @@
 "use client"
-import { usePetContext } from '@/lib/hooks'
-import Image from 'next/image'
-import React, { useTransition } from 'react'
-import PetButton from './pet-button';
-import { deletePet } from '@/actions/actions';
+
+import { usePetContext } from '@/lib/hooks';
 import { Pet } from '@prisma/client';
+import Image from 'next/image';
+import PetButton from './pet-button';
 
 export default function PetDetails() {
   const { selectedPet } = usePetContext();
@@ -34,7 +33,6 @@ type Props = {
 
 function TopBar({ pet }: Props) {
   const { handleCheckoutPet } = usePetContext();
-  const [isPending, startTransition] = useTransition();
 
   return (
     <div className='flex items-center bg-white px-8 py-5 border-b border-light'>
@@ -45,12 +43,11 @@ function TopBar({ pet }: Props) {
         width={75}
         className='h-[75px] w-[75px] rounded-full object-cover'
       />
-      <h2 className='text-3xl font-semibold leading-7 ml-5'>{pet?.name}</h2>
+      <h2 className='text-3xl font-semibold leading-7 ml-5'>{pet.name}</h2>
 
       <div className='ml-auto space-x-2'>
         <PetButton actionType="edit">Edit</PetButton>
         <PetButton
-          disabled={isPending}
           onClick={async () => await handleCheckoutPet(pet.id)}
           actionType="checkout"
         >Checkout
@@ -73,11 +70,11 @@ function OtherInfo({ pet }: Props) {
     <div className='flex items-center py-10 px-5 justify-around'>
       <div className='text-center'>
         <h3 className='text-[13px] font-medium uppercase text-zinc-700'>Owner name</h3>
-        <p className='mt-1 text-lg text-zinc-800'>{pet?.ownerName}</p>
+        <p className='mt-1 text-lg text-zinc-800'>{pet.ownerName}</p>
       </div>
       <div className='text-center'>
         <h3 className='text-[13px] font-medium uppercase text-zinc-700'>Age</h3>
-        <p className='mt-1 text-lg text-zinc-800'>{pet?.age}</p>
+        <p className='mt-1 text-lg text-zinc-800'>{pet.age}</p>
       </div>
     </div>
   )
@@ -86,7 +83,7 @@ function OtherInfo({ pet }: Props) {
 function Notes({ pet }: Props) {
   return (
     <section className='flex-1 bg-white px-7 py-5 rounded-md mb-9 mx-8 border border-light'>
-      {pet?.notes}
+      {pet.notes}
     </section>
   )
 }

@@ -21,7 +21,7 @@ export async function addPet(pet: PetEssentials) {
   revalidatePath("/app", "layout");
 }
 
-export async function editPet(petId: string, newPetData: PetEssentials) {
+export async function editPet(petId: Pet["id"], newPetData: PetEssentials) {
   try {
     await prisma.pet.update({
       where: {
@@ -37,7 +37,7 @@ export async function editPet(petId: string, newPetData: PetEssentials) {
   revalidatePath("/app", "layout");
 }
 
-export async function deletePet(petId: string) {
+export async function deletePet(petId: Pet["id"]) {
   try {
     await prisma.pet.delete({
       where: {
