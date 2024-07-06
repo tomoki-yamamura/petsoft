@@ -1,6 +1,7 @@
 import BackgroundPattern from "@/components/BackgroundPattern"
 import AppFooter from "@/components/app-footer"
 import AppHeader from "@/components/app-header"
+import { Toaster } from "@/components/ui/sonner"
 import PetContextProvider from "@/contexts/pet-context-provider"
 import SearchContextProvider from "@/contexts/search-context-provider"
 import prisma from "@/lib/db"
@@ -23,6 +24,8 @@ export default async function Layout({ children }: {
         </SearchContextProvider>
         <AppFooter />
       </div>
+
+      <Toaster position="top-right" />
     </>
   )
 }

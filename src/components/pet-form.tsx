@@ -1,12 +1,13 @@
 "use client"
 
-import { addPet } from "@/actions/actions";
+import { addPet, editPet } from "@/actions/actions";
 import { usePetContext } from "@/lib/hooks";
 import { Button } from "./ui/button";
 import { Input } from "./ui/input";
 import { Label } from "./ui/label";
 import { Textarea } from "./ui/textarea";
 import PetFormBtn from "./pet-form-btn";
+import { toast } from "sonner";
 
 type PetFormProps = {
   actionType: "add" | "edit";
@@ -16,30 +17,22 @@ type PetFormProps = {
 export default function PetForm({ actionType, onFormSubmission }: PetFormProps) {
   const { handleAddPet, handleEditPet, selectedPet } = usePetContext();
 
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault()
-    const formData = new FormData(event.currentTarget);
-
-    const pet = {
-      name: formData.get("name") as string,
-      ownerName: formData.get("ownerName") as string,
-      imageUrl: formData.get("imageUrl") as string || "https://bytegrad.com/course-assets/react-nextjs/pet-placeholder.png",
-      age: Number(formData.get("age")),
-      notes: formData.get("notes") as string,
-    }
-
-    if (actionType === "add") {
-      handleAddPet(pet)
-    } else if (actionType === "edit") {
-      handleEditPet(selectedPet!.id, pet)
-    }
-
-    onFormSubmission();
-  }
-
   return (
     <form action={async (formData) => {
-      await addPet(formData);
+      if (actionType === "add") {
+        const error = await addPet(formData);
+        if(error) {
+          toast.warning(error.msg)
+          return;
+        }
+      }
+      if (actionType === "edit") {
+        const error = await editPet(selectedPet!.id, formData);
+        if(error) {
+          toast.warning(error.msg)
+          return;
+        }
+      }
       onFormSubmission();
     }} className="flex flex-col">
       <div className=" space-y-3">
