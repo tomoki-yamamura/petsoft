@@ -1,6 +1,9 @@
 "use client"
 
+import { DEFAULT_PET_IMAGE } from "@/lib/constants";
 import { usePetContext } from "@/lib/hooks";
+import { TPetForm, petFormSchema } from "@/lib/validations";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import PetFormBtn from "./pet-form-btn";
 import { Input } from "./ui/input";
@@ -12,38 +15,32 @@ type PetFormProps = {
   onFormSubmission: () => void;
 }
 
-type TPetForm = {
-  name: string;
-  ownerName: string;
-  imageUrl: string;
-  age: number;
-  notes: string
-}
-
 export default function PetForm({ actionType, onFormSubmission }: PetFormProps) {
   const { handleAddPet, handleEditPet, selectedPet } = usePetContext();
 
   const {
     register,
     trigger,
+    getValues,
     formState: {
-      isSubmitting,
       errors
     }
-  } = useForm<TPetForm>();
+  } = useForm<TPetForm>({
+    resolver: zodResolver(petFormSchema)
+  });
 
   return (
     <form
-      action={async (formData) => {
+      action={async () => {
         const result = await trigger();
         if (!result) return
-        const petData = {
-          name: formData.get("name") as string,
-          ownerName: formData.get("ownerName") as string,
-          imageUrl: (formData.get("imageUrl") as string) || "https://bytegrad.com/course-assets/react-nextjs/pet-placeholder.png",
-          age: Number(formData.get("age") as string),
-          notes: formData.get("notes") as string,
-        }
+
+        onFormSubmission();
+
+        const petData = getValues();
+        petData.imageUrl = petData.imageUrl || DEFAULT_PET_IMAGE
+        petData.age = Number(petData.age)
+
         if (actionType === "add") {
           handleAddPet(petData)
         } else if (actionType === "edit") {

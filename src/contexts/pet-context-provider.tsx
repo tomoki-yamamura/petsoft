@@ -53,7 +53,7 @@ export default function PetContextProvider({ children, data }: PetContextProvide
 
     const error = await addPet(newPet)
     if (error) {
-      toast.warning(error.msg)
+      toast.warning(error.message)
       return
     }
   }
@@ -63,7 +63,7 @@ export default function PetContextProvider({ children, data }: PetContextProvide
 
     const error = await editPet(petId, newPetData);
     if (error) {
-      toast.warning(error.msg)
+      toast.warning(error.message)
       return;
     }
   }
@@ -73,7 +73,7 @@ export default function PetContextProvider({ children, data }: PetContextProvide
 
     const error = await deletePet(petId)
     if (error) {
-      toast.warning(error.msg)
+      toast.warning(error.message)
       return;
     }
     setSelectedPetId(null)
