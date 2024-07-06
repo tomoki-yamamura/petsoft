@@ -25,6 +25,7 @@ export default function PetForm({ actionType, onFormSubmission }: PetFormProps) 
 
   const {
     register,
+    trigger,
     formState: {
       isSubmitting,
       errors
@@ -32,27 +33,34 @@ export default function PetForm({ actionType, onFormSubmission }: PetFormProps) 
   } = useForm<TPetForm>();
 
   return (
-    <form action={async (formData) => {
-      onFormSubmission();
-
-      const petData = {
-        name: formData.get("name") as string,
-        ownerName: formData.get("ownerName") as string,
-        imageUrl: (formData.get("imageUrl") as string) || "https://bytegrad.com/course-assets/react-nextjs/pet-placeholder.png",
-        age: Number(formData.get("age") as string),
-        notes: formData.get("notes") as string,
-      }
-      if (actionType === "add") {
-        handleAddPet(petData)
-      } else if (actionType === "edit") {
-        handleEditPet(selectedPet!.id, petData)
-      }
-    }} className="flex flex-col">
+    <form
+      action={async (formData) => {
+        const result = await trigger();
+        if (!result) return
+        const petData = {
+          name: formData.get("name") as string,
+          ownerName: formData.get("ownerName") as string,
+          imageUrl: (formData.get("imageUrl") as string) || "https://bytegrad.com/course-assets/react-nextjs/pet-placeholder.png",
+          age: Number(formData.get("age") as string),
+          notes: formData.get("notes") as string,
+        }
+        if (actionType === "add") {
+          handleAddPet(petData)
+        } else if (actionType === "edit") {
+          handleEditPet(selectedPet!.id, petData)
+        }
+      }} className="flex flex-col">
       <div className=" space-y-3">
         <div className="space-y-1">
           <Label htmlFor="name">Name</Label>
           <Input
-            {...register("name")}
+            {...register("name", {
+              required: "Name is required",
+              minLength: {
+                value: 3,
+                message: "Name must be more than 2 characters long"
+              }
+            })}
             id="name"
           />
           {errors.name && <span className="text-red-500">{errors.name.message}</span>}
@@ -62,7 +70,13 @@ export default function PetForm({ actionType, onFormSubmission }: PetFormProps) 
           <Label htmlFor="ownerName">Owner Name</Label>
           <Input
             id="ownerName"
-            {...register("ownerName")}
+            {...register("ownerName", {
+              required: "OwnerName is required",
+              maxLength: {
+                value: 20,
+                message: "OwnerName must be less than 20 characters long"
+              }
+            })}
           />
           {errors.ownerName && <span className="text-red-500">{errors.ownerName.message}</span>}
 
