@@ -1,10 +1,10 @@
 "use client"
 import { usePetContext } from '@/lib/hooks'
-import { Pet } from '@/lib/types';
 import Image from 'next/image'
 import React, { useTransition } from 'react'
 import PetButton from './pet-button';
 import { deletePet } from '@/actions/actions';
+import { Pet } from '@prisma/client';
 
 export default function PetDetails() {
   const { selectedPet } = usePetContext();
