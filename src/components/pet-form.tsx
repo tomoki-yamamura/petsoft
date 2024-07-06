@@ -13,7 +13,7 @@ type PetFormProps = {
 }
 
 export default function PetForm({ actionType, onFormSubmission }: PetFormProps) {
-  const { handleAddPet } = usePetContext();
+  const { handleAddPet, selectedPet } = usePetContext();
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault()
@@ -37,23 +37,25 @@ export default function PetForm({ actionType, onFormSubmission }: PetFormProps) 
       <div className=" space-y-3">
         <div className="space-y-1">
           <Label htmlFor="name">Name</Label>
-          <Input name="name" id="name" type="text" required />
+          <Input name="name" id="name" type="text" required
+          defaultValue={actionType === "edit" ? selectedPet?.name : ""} />
         </div>
         <div className="space-y-1">
           <Label htmlFor="ownerName">Owner Name</Label>
-          <Input name="ownerName" id="ownerName" type="text" required />
+          <Input name="ownerName" id="ownerName" type="text" required
+            defaultValue={actionType === "edit" ? selectedPet?.ownerName : ""} />
         </div>
         <div className="space-y-1">
           <Label htmlFor="imageUrl">Image Url</Label>
-          <Input name="imageUrl" id="imageUrl" type="text" />
+          <Input name="imageUrl" id="imageUrl" type="text" defaultValue={actionType === "edit" ? selectedPet?.imageUrl : ""}/>
         </div>
         <div className="space-y-1">
           <Label htmlFor="age">Age</Label>
-          <Input name="age" id="age" type="number" required />
+          <Input name="age" id="age" type="number" required defaultValue={actionType === "edit" ? selectedPet?.age : ""} />
         </div>
         <div className="space-y-1">
           <Label htmlFor="notes">Notes</Label>
-          <Textarea name="notes" id="notes" rows={3} required />
+          <Textarea name="notes" id="notes" rows={3} required defaultValue={actionType === "edit" ? selectedPet?.notes : ""}/>
         </div>
       </div>
       <Button className="mt-5 self-end" type="submit">
