@@ -1,6 +1,7 @@
 "use client";
 import { Pet } from "@/lib/types";
 import { createContext, useState } from "react"
+// import { addPet } from "@/actions/actions";
 
 type PetContextProviderProps = {
   children: React.ReactNode;
@@ -27,11 +28,12 @@ export default function PetContextProvider({ children, data }: PetContextProvide
   const selectedPet = pets.find((pet) => pet.id === selectedPetId)
   const numberOfPets = pets.length;
 
-  const handleAddPet = (newPet: Omit<Pet, "id">) => {
-    setPets(prev => [...prev, {
-      id: Date.now().toString(),
-      ...newPet
-    }])
+  const handleAddPet = async (newPet: Omit<Pet, "id">) => {
+    // setPets(prev => [...prev, {
+    //   id: Date.now().toString(),
+    //   ...newPet
+    // }])
+    await addPet
   }
 
   const handleEditPet = (petId: string, newPetData: Omit<Pet, "id">) => {
@@ -51,6 +53,7 @@ export default function PetContextProvider({ children, data }: PetContextProvide
     setPets(prev => prev.filter(pet => pet.id !== id))
     setSelectedPetId(null)
   }
+
   const handleChangeSelectedPetId = (id: string) => {
     setSelectedPetId(id)
   }
@@ -72,3 +75,7 @@ export default function PetContextProvider({ children, data }: PetContextProvide
     </PetContext.Provider>
   )
 }
+function addPet() {
+  throw new Error("Function not implemented.");
+}
+
