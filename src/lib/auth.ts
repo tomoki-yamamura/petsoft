@@ -1,7 +1,7 @@
-import NextAuth, { NextAuthConfig } from "next-auth"
-import Credentials from "next-auth/providers/credentials"
+import NextAuth, { NextAuthConfig } from "next-auth";
+import Credentials from "next-auth/providers/credentials";
 import prisma from "./db";
-import bcrypt from "bcryptjs"
+import bcrypt from "bcryptjs";
 
 export const authOptions = {
   pages: {
@@ -14,41 +14,49 @@ export const authOptions = {
 
         const user = await prisma.user.findUnique({
           where: {
-            email
+            email,
           },
-        })
+        });
         if (!user) {
           console.log("No user found");
-          return null
+          return null;
         }
 
-        const passwordMatch = bcrypt.compare(password as string, user.hashedPassword)
+        const passwordMatch = bcrypt.compare(
+          password as string,
+          user.hashedPassword
+        );
         if (!passwordMatch) {
           console.log("Invalid credentials");
-          return null
+          return null;
         }
 
         return user;
-      }
-    })
+      },
+    }),
   ],
   callbacks: {
     authorized: ({ auth, request }) => {
-
       const isLoggedIn = Boolean(auth?.user);
-      const isTryingToAccessApp = request.nextUrl.pathname.includes("/app")
+      const isTryingToAccessApp = request.nextUrl.pathname.includes("/app");
       if (!isLoggedIn && isTryingToAccessApp) {
-        return false
+        return false;
       }
       if (isLoggedIn && isTryingToAccessApp) {
-        return true
+        return true;
       }
 
-      if (!isTryingToAccessApp) {
-        return true
+      if (isLoggedIn && !isTryingToAccessApp) {
+        return Response.redirect(new URL("/app/dashboard", request.nextUrl));
       }
-    }
-  }
-} satisfies NextAuthConfig
 
-export const { auth, signIn, signOut } = NextAuth(authOptions)
+      if (!isLoggedIn && !isTryingToAccessApp) {
+        return true;
+      }
+
+      return false
+    },
+  },
+} satisfies NextAuthConfig;
+
+export const { auth, signIn, signOut } = NextAuth(authOptions);
