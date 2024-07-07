@@ -52,7 +52,7 @@ export async function addPet(pet: unknown) {
         ...validatedPet.data,
         user: {
           connect: {
-            id: session.user?.id
+            id: session.user.id
           }
         }
       }
@@ -82,7 +82,7 @@ export async function editPet(petId: unknown, newPetData: unknown) {
       message: "Pet not found"
     }
   }
-  if (pet.userId !== session.user?.id) {
+  if (pet.userId !== session.user.id) {
     return {
       message: "Not authorized"
     }
@@ -131,7 +131,7 @@ export async function deletePet(petId: unknown) {
       message: "Pet not found"
     }
   }
-  if (pet.userId !== session.user?.id) {
+  if (pet.userId !== session.user.id) {
     return {
       message: "Not authorized"
     }
