@@ -27,13 +27,15 @@ export async function logOut() {
 }
 
 export async function signUp(formData: unknown) {
+  await sleep(1000);
+
   if (!(formData instanceof FormData)) {
     return {
       message: "Invalid form data",
     };
   }
-  const formDataEntries = Object.fromEntries(formData.entries())
-  
+  const formDataEntries = Object.fromEntries(formData.entries());
+
   const validatedFormData = authSchema.safeParse(formDataEntries);
   if (!validatedFormData.success) {
     return {

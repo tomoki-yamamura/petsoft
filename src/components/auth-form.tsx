@@ -1,8 +1,7 @@
 import { logIn, signUp } from "@/actions/actions";
-import { Button } from "./ui/button";
+import AuthFormBtn from "./auth-form-btn";
 import { Input } from "./ui/input";
 import { Label } from "./ui/label";
-import prisma from "@/lib/db";
 
 type AuthFormProps = {
   type: "signup" | "login"
@@ -23,7 +22,7 @@ export default function AuthForm({ type }: AuthFormProps) {
         <Input id="password" name="password" type="password" />
       </div>
 
-      {type === "login" ? <Button>Log in</Button> : <Button>Sign Up</Button>}
+      <AuthFormBtn type={type} />
     </form>
   )
 }
