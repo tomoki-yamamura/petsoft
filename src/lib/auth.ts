@@ -3,6 +3,7 @@ import Credentials from "next-auth/providers/credentials";
 import prisma from "./db";
 import bcrypt from "bcryptjs";
 import { getUserByEmail } from "./server-utils";
+import { TAuth, authSchema } from "./validations";
 
 export const authOptions = {
   pages: {
@@ -11,10 +12,14 @@ export const authOptions = {
   providers: [
     Credentials({
       async authorize(credentials) {
-        const { email, password } = credentials;
+        const validatedFormDataObject = authSchema.safeParse(credentials);
+        if (!validatedFormDataObject.success) {
+          return null
+        }
+        const { email, password } = validatedFormDataObject.data;
 
-        const user = await getUserByEmail(email)
-        
+        const user = await getUserByEmail(email);
+
         if (!user) {
           console.log("No user found");
           return null;
@@ -71,4 +76,9 @@ export const authOptions = {
   },
 } satisfies NextAuthConfig;
 
-export const { auth, signIn, signOut } = NextAuth(authOptions);
+export const {
+  auth,
+  signIn,
+  signOut,
+  handlers: { GET, POST },
+} = NextAuth(authOptions);
