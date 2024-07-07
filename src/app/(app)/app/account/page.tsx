@@ -1,11 +1,13 @@
 import ContentBlock from "@/components/content-block";
 import H1 from "@/components/h1";
-import { auth } from "@/lib/auth"
+import SignOutBtn from "@/components/sign-out-btn";
+import { Button } from "@/components/ui/button";
+import { auth, signOut } from "@/lib/auth"
 import { redirect } from "next/navigation";
 
 export default async function Page() {
   const session = await auth();
-  if(!session?.user) {
+  if (!session?.user) {
     redirect("/login")
   }
 
@@ -13,8 +15,9 @@ export default async function Page() {
     <main>
       <H1 className="my-8 text-white">Your Account</H1>
 
-      <ContentBlock className="h-[500px] flex items-center justify-center">
+      <ContentBlock className="h-[500px] flex-col gap-3 flex items-center justify-center">
         <p>Logged in as {session.user.email}</p>
+        <SignOutBtn />
       </ContentBlock>
     </main>
   )

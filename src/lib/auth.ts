@@ -51,4 +51,4 @@ export const authOptions = {
   }
 } satisfies NextAuthConfig
 
-export const { auth, signIn } = NextAuth(authOptions)
+export const { auth, signIn, signOut } = NextAuth(authOptions)
