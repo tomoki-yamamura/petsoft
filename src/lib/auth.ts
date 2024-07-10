@@ -40,7 +40,6 @@ export const authOptions = {
   ],
   callbacks: {
     authorized: ({ auth, request }) => {
-      // runs on every request with middleware
       const isLoggedIn = Boolean(auth?.user);
       const isTryingToAccessApp = request.nextUrl.pathname.includes("/app");
 
